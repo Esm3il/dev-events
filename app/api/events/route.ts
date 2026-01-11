@@ -12,7 +12,12 @@ export async function POST(req: NextRequest){
         let event;
 
         try{
-            event = Object.fromEntries(formData.entries());
+            const entries = Object.fromEntries(formData.entries());
+            event = {
+                ...entries,
+                agenda: formData.getAll('agenda'),
+                tags: formData.getAll('tags'),
+            };
         }catch(e){
             return NextResponse.json({message: "Invalid JSON Data Format"}, {status: 400});
         }
