@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import BookEvent from "@/components/BookEvent";
+import { IEvent } from "@/database";
+import EventCard from "@/components/EventCard";
+import { getSimilarEventsBySlug } from "@/lib/actions/event.actions";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -34,6 +37,8 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
 
     if(!event) return notFound();
     const bookings = 10;
+    const rawSimilarEvents: IEvent[] = await getSimilarEventsBySlug(slug);
+    const similarEvents = JSON.parse(JSON.stringify(rawSimilarEvents));
     return (
         <section id="event">
             <div className="header">
@@ -58,14 +63,14 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                         <EventDetailItem icon="/icons/audience.svg" alt="Audience" label={event.audience} />
                     </section>
 
-                    <EventAgendaItem agendaItems={JSON.parse(event.agenda[0])} />
+                    <EventAgendaItem agendaItems={event.agenda} />
 
                     <section className="flex-col-gap-2">
                         <h2>About the Organizer</h2>
                         <p>{event.organizer}</p>
                     </section>
 
-                    <EventTagsItem tags={JSON.parse(event.tags[0])} />
+                    <EventTagsItem tags={event.tags} />
 
                 </div>
 
@@ -85,6 +90,14 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                         <BookEvent />
                     </div>
                 </aside>
+            </div>
+            <div className="flex w-full flex-col gap-4 pt-20">
+                <h2>Similar Events</h2>
+                <div className="events">
+                    {similarEvents && similarEvents.length > 0 ? (similarEvents.map((similarEvent) => (
+                        <EventCard key={similarEvent.title} {...similarEvent} />
+                    ))) : (<p>No similar events found.</p>)}
+                </div>
             </div>
         </section>
     );
