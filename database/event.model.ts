@@ -176,10 +176,7 @@ function normalizeTime(timeString: string): string {
   return `${hours.toString().padStart(2, '0')}:${minutes}`;
 }
 
-// Create unique index on slug for better performance
-EventSchema.index({ slug: 1 }, { unique: true });
-
-// Create compound index for common queries
+// Create compound index for common queries (slug index is already created by unique: true)
 EventSchema.index({ date: 1, mode: 1 });
 
 const Event = models.Event || model<IEvent>('Event', EventSchema);

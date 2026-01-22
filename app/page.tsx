@@ -1,15 +1,24 @@
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
-import { IEvent } from "@/database";
-import { cacheLife } from "next/cache";
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+import Event, { IEvent } from "@/database/event.model";
+import connectDB from "@/lib/mongodb";
+export const dynamic = "force-dynamic";
 
 const Page = async () => {
-  'use cache';
-  cacheLife('hours');
-  const response = await fetch(`${BASE_URL}/api/events`);
-  const { events = [] } = await response.json();
+  await connectDB();
+
+  let events: IEvent[] = [];
+  try {
+    const docs = await Event.find().sort({ createdAt: -1 }).lean();
+    events = docs.map((doc: any) => ({
+      ...doc,
+      _id: doc._id?.toString(),
+      createdAt: doc.createdAt ? new Date(doc.createdAt).toISOString() : undefined,
+      updatedAt: doc.updatedAt ? new Date(doc.updatedAt).toISOString() : undefined,
+    })) as IEvent[];
+  } catch (error) {
+    console.error("Failed to load events", error);
+  }
 
   return (
     <section>

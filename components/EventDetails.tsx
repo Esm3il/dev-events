@@ -1,11 +1,9 @@
-import React from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import BookEvent from '@/components/BookEvent';
 import { IEvent } from '@/database';
 import EventCard from '@/components/EventCard';
 import { getSimilarEventsBySlug } from '@/lib/actions/event.actions';
-import { cacheLife } from 'next/cache';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -32,11 +30,9 @@ const EventAgendaItem = ({ agendaItems } : { agendaItems: string[] }) => (
     </div>
 )
 
-const EventDetails = async ({ params } : { params: Promise<string>}) => {
-    'use cache';
-    cacheLife('hours');
+const EventDetails = async ({ params } : { params: { slug: string }}) => {
 
-    const slug = await params;
+    const slug = params.slug;
 
     const request = await fetch(`${BASE_URL}/api/events/${slug}`);
     const { data: event } = await request.json();
