@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dev-Events
+
+Dev-Events is a full-stack web application built with Next.js that serves as a central hub for discovering and booking developer-focused events, including hackathons, meetups, and conferences. The platform features a dynamic and modern user interface, a robust backend for event and booking management, and integrated analytics.
+
+## Features
+
+-   **Event Discovery:** Browse a curated list of developer events on the homepage.
+-   **Detailed Event Pages:** View comprehensive information for each event, including description, agenda, location, date, time, and organizer details.
+-   **Event Booking:** A simple, email-based system allows users to book their spot for an event.
+-   **Similar Event Recommendations:** Discover related events based on shared tags.
+-   **Dynamic UI:** An interactive light-ray background effect created with WebGL (OGL) enhances the user experience.
+-   **Analytics:** Integrated with PostHog for tracking user engagement and application performance.
+-   **Image Management:** Utilizes Cloudinary for efficient handling of event image uploads.
+
+## Tech Stack
+
+-   **Framework:** [Next.js](https://nextjs.org/) (App Router)
+-   **Language:** [TypeScript](https://www.typescriptlang.org/)
+-   **Database:** [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/)
+-   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+-   **Analytics:** [PostHog](https://posthog.com/)
+-   **Image Management:** [Cloudinary](https://cloudinary.com/)
+-   **3D Graphics:** [OGL](https://github.com/oframe/ogl) (WebGL)
+
+## Environment Variables
+
+To run this project locally, you need to create a `.env.local` file in the root directory and add the following environment variables:
+
+```bash
+# MongoDB Connection String
+MONGODB_URI="your_mongodb_connection_string"
+
+# Base URL of the application
+NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+
+# Cloudinary Credentials (for event image uploads)
+# You can find this in your Cloudinary dashboard
+CLOUDINARY_URL="cloudinary://<API_KEY>:<API_SECRET>@<CLOUD_NAME>"
+
+# PostHog Analytics
+NEXT_PUBLIC_POSTHOG_KEY="your_posthog_public_key"
+```
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to set up and run the project on your local machine.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/Esm3il/dev-events.git
+    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2.  **Navigate to the project directory:**
+    ```sh
+    cd dev-events
+    ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3.  **Install dependencies:**
+    ```sh
+    npm install
+    ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4.  **Set up environment variables:**
+    Create a `.env.local` file in the root of the project and populate it with the required variables as described in the section above.
 
-## Learn More
+5.  **Run the development server:**
+    ```sh
+    npm run dev
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+6.  Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Endpoints
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The application exposes the following API endpoints for managing events:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+-   `GET /api/events`
+    -   Fetches a list of all events, sorted by creation date.
+-   `POST /api/events`
+    -_   Creates a new event. Requires form-data including event details and an image file.
+-   `GET /api/events/[slug]`
+    -   Fetches the details of a single event by its unique slug.
